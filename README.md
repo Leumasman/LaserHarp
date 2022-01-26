@@ -3,6 +3,8 @@ A midi sound controler built on an Arduino Uno with a laser split by a rotating 
 
 There are three main components in this system; a MIDI controller for the sound, stepper motor for fanning out the laser into multiple discrete sources and the laser controller to turn it on and off in between movements. 
 
+This project has been published and tracked on Hackaday.io - [follow here](https://hackaday.io/project/183498-lazer-harp-variant) 
+
 ## MIDI Controller
 
 The MIDI controller uses the default serial port in the Arduino examples to push midi controller commands back up to the PC through a MIDI to USB cable.
