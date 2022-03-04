@@ -42,18 +42,22 @@
  http://www.arduino.cc/en/Tutorial/MIDI
  
  */
+ 
+#include <SoftwareSerial.h>
+
+SoftwareSerial portOne(PB7, PB6);
 
 void setup() {
   //  Set MIDI baud rate:
-  Serial.begin(31250);
+  portOne.begin(31250);
 }
 
 void loop() {
   // play notes from F#-0 (0x1E) to F#-5 (0x5A):
-  for (int note = 0x3A; note < 0x50; note ++) {
+  for (int note = 0x30; note < 0x5A; note ++) {
     //Note on channel 1 (0x90), some note value (note), middle velocity (0x45):
-    noteOn(0x90, note, 0x25);
-    delay(100);
+    noteOn(0x90, note, 0x45);
+    delay(500);
     //Note on channel 1 (0x90), some note value (note), silent velocity (0x00):
     noteOn(0x90, note, 0x00);   
     delay(100);
@@ -63,7 +67,7 @@ void loop() {
 //  plays a MIDI note.  Doesn't check to see that
 //  cmd is greater than 127, or that data values are  less than 127:
 void noteOn(int cmd, int pitch, int velocity) {
-  Serial.write(cmd);
-  Serial.write(pitch);
-  Serial.write(velocity);
+  portOne.write(cmd);
+  portOne.write(pitch);
+  portOne.write(velocity);
 }
