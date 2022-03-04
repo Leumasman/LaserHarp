@@ -44,12 +44,16 @@
  */
  
 #include <SoftwareSerial.h>
+#include "musicUtil.h"
 
 SoftwareSerial portOne(PB7, PB6);
 
 void setup() {
   //  Set MIDI baud rate:
   portOne.begin(31250);
+  MusicUtil_Init(); 
+  MusicUtil_MetronomeTest(portOne);
+  delay(500);
 }
 
 void loop() {
