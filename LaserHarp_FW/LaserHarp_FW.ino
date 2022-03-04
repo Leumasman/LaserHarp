@@ -44,15 +44,40 @@
  */
  
 #include <SoftwareSerial.h>
-#include "musicUtil.h"
+//#include "musicUtil.h"
+
+#define SECONDS_PER_MINUTE      60
+#define MIDI_NOTE_COMMAND       0x90
+#define MIDI_NOTE_ON_VOLUME     0x45
+#define MIDI_NOTE_OFF_VOLUME    0x00
+
+uint8_t mMusicUtil_BPM = 60; 
+uint8_t mMusicUtil_BPMeasure = 4;
+uint16_t mMusicUtil_MSecPerBeat = 0;  
+uint16_t mMusicUtil_MSecPerMeasure = 0;  
+
+// Public Functions
+void MusicUtil_INIT();
+void MusicUtil_SetBPM(uint8_t bpm); 
+void MusicUtil_SetMeasDiv(uint8_t measDiv);
+
+void MusicUtil_PlayNoteInBeat(uint8_t note, uint16_t noteLenMSec);
+void MusicUtil_PlayMajArpeg(uint8_t startingNote);
+void MusicUtil_PlayMinArpeg(uint8_t startingNote);
+
+void MusicUtil_MetronomeTest();
+
+
+// Private Functions
+void MusicUtil_calcMSecInMeasure(); 
 
 SoftwareSerial portOne(PB7, PB6);
 
 void setup() {
   //  Set MIDI baud rate:
   portOne.begin(31250);
-  MusicUtil_Init(); 
-  MusicUtil_MetronomeTest(portOne);
+  MusicUtil_INIT(); 
+  MusicUtil_MetronomeTest();
   delay(500);
 }
 
@@ -75,3 +100,84 @@ void noteOn(int cmd, int pitch, int velocity) {
   portOne.write(pitch);
   portOne.write(velocity);
 }
+
+void MusicUtil_INIT()
+{
+    MusicUtil_calcMSecInMeasure();
+}
+
+void MusicUtil_SetBPM(uint8_t bpm)
+{
+    mMusicUtil_BPM = bpm; 
+}
+
+void MusicUtil_SetMeasDiv(uint8_t bpMeas)
+{
+    mMusicUtil_BPMeasure = bpMeas; 
+}
+
+void MusicUtil_MetronomeTest()
+{
+    uint8_t bingNote = 0x40;
+    uint8_t bongNote = 0x39; 
+
+    for(uint8_t i = 0; i < 100; i++)
+    {
+        MusicUtil_PlayNoteInBeat(bingNote, 250); 
+        MusicUtil_PlayNoteInBeat(bongNote, 250);
+        MusicUtil_PlayNoteInBeat(bongNote, 250);
+        MusicUtil_PlayNoteInBeat(bongNote, 250);
+    }
+}
+
+/*
+    PlayNote()
+
+    This function executes the on and off of a given note over
+    stuff. 
+*/
+void MusicUtil_PlayNoteInBeat(uint8_t note, uint16_t noteLenMSec)
+{
+    uint32_t noteOffDelayMSec = (noteLenMSec > mMusicUtil_MSecPerBeat) ? mMusicUtil_MSecPerBeat : noteLenMSec; 
+    
+    uint32_t noteStartMSec = millis();
+    // Turn the Note ON
+    portOne.write(MIDI_NOTE_COMMAND);
+    portOne.write(note);
+    portOne.write(MIDI_NOTE_ON_VOLUME);
+
+    // Wait until it is time to turn the note off
+    while(millis() < (noteStartMSec + noteOffDelayMSec))
+    {
+        // wait
+        delay(3);
+    }
+
+    // Turn the note OFF
+    portOne.write(MIDI_NOTE_COMMAND);
+    portOne.write(note);
+    portOne.write((uint8_t)MIDI_NOTE_OFF_VOLUME);
+
+    // Wait until the beat is done
+    while(millis() < (noteStartMSec + mMusicUtil_MSecPerBeat))
+    {
+        // wait()
+    }
+}
+
+void MusicUtil_PlayMajArpeg(uint8_t startingNote)
+{
+
+}
+
+void MusicUtil_PlayMinArpeg(uint8_t startingNote)
+{
+
+}
+
+void MusicUtil_calcMSecInMeasure()
+{
+    float secPerBeat = SECONDS_PER_MINUTE / mMusicUtil_BPM; 
+    mMusicUtil_MSecPerBeat = secPerBeat * 1000; 
+    mMusicUtil_MSecPerMeasure = mMusicUtil_MSecPerBeat * mMusicUtil_BPMeasure;
+} 
