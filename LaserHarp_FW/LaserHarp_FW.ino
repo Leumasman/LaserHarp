@@ -81,6 +81,7 @@ void setup() {
   delay(500);
 }
 
+// Arpegio (pattern to play when one beam is interupted)
 void loop() {
   // play notes from F#-0 (0x1E) to F#-5 (0x5A):
   for (int note = 0x30; note < 0x5A; note ++) {
@@ -101,21 +102,25 @@ void noteOn(int cmd, int pitch, int velocity) {
   portOne.write(velocity);
 }
 
+// Establishes a metronome pattern (ex: BIP boop boop boop)
 void MusicUtil_INIT()
 {
     MusicUtil_calcMSecInMeasure();
 }
 
+// bpm(speed) = beats per minute
 void MusicUtil_SetBPM(uint8_t bpm)
 {
     mMusicUtil_BPM = bpm; 
 }
 
+//defines the amount of time in a measure
 void MusicUtil_SetMeasDiv(uint8_t bpMeas)
 {
     mMusicUtil_BPMeasure = bpMeas; 
 }
 
+//Sets up the metronome function
 void MusicUtil_MetronomeTest()
 {
     uint8_t bingNote = 0x40;
