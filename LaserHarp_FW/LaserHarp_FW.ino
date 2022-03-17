@@ -51,7 +51,7 @@
 #define MIDI_NOTE_ON_VOLUME     0x45
 #define MIDI_NOTE_OFF_VOLUME    0x00
 
-uint8_t mMusicUtil_BPM = 60; 
+uint8_t mMusicUtil_BPM = 200; 
 uint8_t mMusicUtil_BPMeasure = 4;
 uint16_t mMusicUtil_MSecPerBeat = 0;  
 uint16_t mMusicUtil_MSecPerMeasure = 0;  
@@ -84,6 +84,7 @@ void setup() {
 // Arpegio (pattern to play when one beam is interupted)
 void loop() {
   // play notes from F#-0 (0x1E) to F#-5 (0x5A):
+
     for(uint8_t i = 0; i < 2; i++)
     {
         MusicUtil_PlayMinArpeg(67); // Gmin
@@ -204,7 +205,7 @@ void MusicUtil_PlayMinArpeg(uint8_t rootNote)
 
 void MusicUtil_calcMSecInMeasure()
 {
-    float secPerBeat = SECONDS_PER_MINUTE / mMusicUtil_BPM; 
+    float secPerBeat = (float)SECONDS_PER_MINUTE / (float)mMusicUtil_BPM; 
     mMusicUtil_MSecPerBeat = secPerBeat * 1000; 
     mMusicUtil_MSecPerMeasure = mMusicUtil_MSecPerBeat * mMusicUtil_BPMeasure;
 } 
