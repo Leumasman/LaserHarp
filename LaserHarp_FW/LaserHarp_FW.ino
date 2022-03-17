@@ -62,8 +62,8 @@ void MusicUtil_SetBPM(uint8_t bpm);
 void MusicUtil_SetMeasDiv(uint8_t measDiv);
 
 void MusicUtil_PlayNoteInBeat(uint8_t note, uint16_t noteLenMSec);
-void MusicUtil_PlayMajArpeg(uint8_t startingNote);
-void MusicUtil_PlayMinArpeg(uint8_t startingNote);
+void MusicUtil_PlayMajArpeg(uint8_t rootNote);
+void MusicUtil_PlayMinArpeg(uint8_t rootNote);
 
 void MusicUtil_MetronomeTest();
 
@@ -84,14 +84,25 @@ void setup() {
 // Arpegio (pattern to play when one beam is interupted)
 void loop() {
   // play notes from F#-0 (0x1E) to F#-5 (0x5A):
-  for (int note = 0x30; note < 0x5A; note ++) {
-    //Note on channel 1 (0x90), some note value (note), middle velocity (0x45):
-    noteOn(0x90, note, 0x45);
-    delay(500);
-    //Note on channel 1 (0x90), some note value (note), silent velocity (0x00):
-    noteOn(0x90, note, 0x00);   
-    delay(100);
-  }
+    for(uint8_t i = 0; i < 8; i++)
+    {
+        MusicUtil_PlayMinArpeg(67); // Gmin
+    }
+
+    for(uint8_t i = 0; i < 8; i++)
+    {
+        MusicUtil_PlayMinArpeg(65); // Fmin
+    }
+
+    for(uint8_t i = 0; i < 8; i++)
+    {
+        MusicUtil_PlayMinArpeg(63); // D#min
+    }
+
+    for(uint8_t i = 0; i < 8; i++)
+    {
+        MusicUtil_PlayMinArpeg(60); // Cmin
+    }
 }
 
 //  plays a MIDI note.  Doesn't check to see that
@@ -170,14 +181,25 @@ void MusicUtil_PlayNoteInBeat(uint8_t note, uint16_t noteLenMSec)
     }
 }
 
-void MusicUtil_PlayMajArpeg(uint8_t startingNote)
-{
+#define MIN_THIRD(c)    c + 3
+#define MAJ_THIRD(c)    c + 4
+#define FIFTH(c)        c + 7
+#define OCTAVE(c)       c + 12
 
+void MusicUtil_PlayMajArpeg(uint8_t rootNote)
+{
+    MusicUtil_PlayNoteInBeat(rootNote, 250); 
+    MusicUtil_PlayNoteInBeat(MAJ_THIRD(rootNote), 250);
+    MusicUtil_PlayNoteInBeat(FIFTH(rootNote), 250);
+    MusicUtil_PlayNoteInBeat(OCTAVE(rootNote), 250);
 }
 
-void MusicUtil_PlayMinArpeg(uint8_t startingNote)
+void MusicUtil_PlayMinArpeg(uint8_t rootNote)
 {
-
+    MusicUtil_PlayNoteInBeat(rootNote, 250); 
+    MusicUtil_PlayNoteInBeat(MIN_THIRD(rootNote), 250);
+    MusicUtil_PlayNoteInBeat(FIFTH(rootNote), 250);
+    MusicUtil_PlayNoteInBeat(OCTAVE(rootNote), 250);
 }
 
 void MusicUtil_calcMSecInMeasure()
