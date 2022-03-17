@@ -77,29 +77,29 @@ void setup() {
   //  Set MIDI baud rate:
   portOne.begin(31250);
   MusicUtil_INIT(); 
-  MusicUtil_MetronomeTest();
+  //MusicUtil_MetronomeTest();
   delay(500);
 }
 
 // Arpegio (pattern to play when one beam is interupted)
 void loop() {
   // play notes from F#-0 (0x1E) to F#-5 (0x5A):
-    for(uint8_t i = 0; i < 8; i++)
+    for(uint8_t i = 0; i < 2; i++)
     {
         MusicUtil_PlayMinArpeg(67); // Gmin
     }
 
-    for(uint8_t i = 0; i < 8; i++)
+    for(uint8_t i = 0; i < 2; i++)
     {
         MusicUtil_PlayMinArpeg(65); // Fmin
     }
 
-    for(uint8_t i = 0; i < 8; i++)
+    for(uint8_t i = 0; i < 2; i++)
     {
         MusicUtil_PlayMinArpeg(63); // D#min
     }
 
-    for(uint8_t i = 0; i < 8; i++)
+    for(uint8_t i = 0; i < 2; i++)
     {
         MusicUtil_PlayMinArpeg(60); // Cmin
     }
