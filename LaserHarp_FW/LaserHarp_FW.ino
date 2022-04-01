@@ -67,6 +67,36 @@ void MusicUtil_PlayMinArpeg(uint8_t rootNote);
 
 void MusicUtil_MetronomeTest();
 
+// Chord Struct
+
+struct chordProg_t {
+    uint8_t rootNote; 
+    uint8_t numberOfRepeats;
+    bool isMajor; 
+};
+
+chordProg_t simpleSongPartA[] = {
+    { 61,    1,  true },    // C# Maj
+    { 61,    1,  true },    // C# Maj
+    { 61,    1,  false },   // C# Min
+    { 66,    1,  false },   // F# Min
+    { 64,    1,  true },   // E Maj
+    { 70,    1,  false },   // A# Maj 
+
+    { 61,    1,  true },    // C# Maj
+    { 61,    1,  true },    // C# Maj
+    { 61,    1,  false },   // C# Min
+    { 66,    1,  false },   // F# Min
+    { 64,    1,  true },   // E Maj
+    { 70,    1,  false },   // A# Maj 
+
+    { 61,    1,  true },    // C# Maj
+    { 61,    1,  true },    // C# Maj
+    { 61,    1,  false },   // C# Min
+    { 66,    1,  false },   // F# Min
+    { 64,    1,  true },   // E Maj
+    { 70,    1,  false },   // A# Maj 
+};
 
 // Private Functions
 void MusicUtil_calcMSecInMeasure(); 
@@ -83,26 +113,21 @@ void setup() {
 
 // Arpegio (pattern to play when one beam is interupted)
 void loop() {
-  // play notes from F#-0 (0x1E) to F#-5 (0x5A):
-
-    for(uint8_t i = 0; i < 2; i++)
+    
+   uint16_t songACount = sizeof(simpleSongPartA) / sizeof(chordProg_t);
+    for(uint16_t i = 0; i < songACount; i++)
     {
-        MusicUtil_PlayMinArpeg(67); // Gmin
-    }
-
-    for(uint8_t i = 0; i < 2; i++)
-    {
-        MusicUtil_PlayMinArpeg(65); // Fmin
-    }
-
-    for(uint8_t i = 0; i < 2; i++)
-    {
-        MusicUtil_PlayMinArpeg(63); // D#min
-    }
-
-    for(uint8_t i = 0; i < 2; i++)
-    {
-        MusicUtil_PlayMinArpeg(60); // Cmin
+        for(uint8_t j = 0; j < simpleSongPartA[i].numberOfRepeats; j++)
+        {
+            if(simpleSongPartA[i].isMajor)
+            {
+                MusicUtil_PlayMajArpeg(simpleSongPartA[i].rootNote);
+            }
+            else
+            {
+                MusicUtil_PlayMinArpeg(simpleSongPartA[i].rootNote);
+            }
+        }   
     }
 }
 
