@@ -75,6 +75,9 @@ struct chordProg_t {
     bool isMajor; 
 };
 
+// https://musescore.com/user/20777916/scores/5447517
+// https://computermusicresource.com/midikeys.html
+
 chordProg_t simpleSongPartA[] = {
     { 61,    1,  true },    // C# Maj
     { 61,    1,  true },    // C# Maj
@@ -113,7 +116,7 @@ void setup() {
 
 // Arpegio (pattern to play when one beam is interupted)
 void loop() {
-    
+
    uint16_t songACount = sizeof(simpleSongPartA) / sizeof(chordProg_t);
     for(uint16_t i = 0; i < songACount; i++)
     {
