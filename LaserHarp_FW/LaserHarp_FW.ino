@@ -215,6 +215,7 @@ void MusicUtil_PlayNoteInBeat(uint8_t note, uint16_t noteLenMSec)
 #define FIFTH(c)        c + 7
 #define OCTAVE(c)       c + 12
 
+//In these two blocks of code, we established a pattern that we wanted the MIDI to output a pattern of an major and minor arpegio
 void MusicUtil_PlayMajArpeg(uint8_t rootNote)
 {
     MusicUtil_PlayNoteInBeat(rootNote, 250); 
@@ -230,6 +231,9 @@ void MusicUtil_PlayMinArpeg(uint8_t rootNote)
     MusicUtil_PlayNoteInBeat(FIFTH(rootNote), 250);
     MusicUtil_PlayNoteInBeat(OCTAVE(rootNote), 250);
 }
+
+//In this block of code, we are enabling the computer to count for an individual measure so we can construct a pattern and call for...
+//... a number of times and end when the measure is has repeated itself for the number of times set.
 
 void MusicUtil_calcMSecInMeasure()
 {
